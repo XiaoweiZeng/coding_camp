@@ -9,14 +9,13 @@
 #include     <getopt.h>
 #include     <string.h>
 
+#include     "uart.h"
 
-#define UART_DEVICE     "/dev/ttyUSB0"
-#define INVALID_AXIS_VALUE  -1
-#define DEFAULT_TIMEOUT     1500
-#define ACTION_LENGTH       60
+#define DEFAULT_TIMEOUT         1500
+#define ACTION_LENGTH           70
+#define ACTION_SINGLE_LENGTH    20
 
-
-int uart_id;
+static int uart_id;
 
 
 typedef struct arm_args {
@@ -39,7 +38,7 @@ static void usage(void)
 }
 
 
-void parse_args(int argc, char *argv[], ARM_ARGS * arm_args)
+static void parse_args(int argc, char *argv[], ARM_ARGS * arm_args)
 {
     int index;
     int cmd;
@@ -101,7 +100,7 @@ void parse_args(int argc, char *argv[], ARM_ARGS * arm_args)
 }
 
 
-int uart_init()
+int uart_init(void)
 {
    struct termios options;
 
@@ -136,7 +135,7 @@ int uart_init()
     return 0;
 }
 
-int uart_send(int fd, char *data, int datalen)
+int uart_send(char *data, int datalen)
 {
     int len = 0;
     int i;
@@ -144,11 +143,11 @@ int uart_send(int fd, char *data, int datalen)
     if (data == NULL)
         fprintf(stderr, "data pointer is NULL\n");
 
-    len = write(fd, data, datalen);
+    len = write(uart_id, data, datalen);
     if (len != datalen)
     {
         fprintf(stderr, "should send %d, actually %d\n", datalen, len);
-        tcflush(fd, TCOFLUSH);
+        tcflush(uart_id, TCOFLUSH);
         return -1;
     }
     else
@@ -164,53 +163,29 @@ int uart_send(int fd, char *data, int datalen)
     return 0;
 }
 
-
-int cmd_get(char *cmd, int * param)
+void uart_close(void)
 {
-    int i;
-    char cmd_single[10];
-
-    /* validate cmd and param */
-
-    if ((cmd == NULL) || (param == NULL))
-    {
-        fprintf(stderr, "cmd or param pointer is NULL\n");
-        return -1;
-    }
-
-    /* check param */
-
-
-
-
-
-    memset(cmd, 0, ACTION_LENGTH);
-
-    for (i = 1; i < 7; i++)
-    {
-        if (param[i] != -1)
-        {
-            snprintf(cmd_single, sizeof(cmd_single), "#%dP%d", i, param[i]);
-            strcat(cmd, cmd_single);
-        }
-    }
-
-    cmd[strlen(cmd)] = '!';
-    cmd[strlen(cmd)+1] = 0;
-
-    return 0;
-
+    close(uart_id);
 }
 
+
+#if 0
 int main(int argc, char *argv[])
 {
     ARM_ARGS arm_args;
-    char action[ACTION_LENGTH] = "#1P1700#2P1500#3P1700#4P1800#5P1500#6P2000T2000!"
+    char action[ACTION_LENGTH] = "#1P1700#2P1500#3P1700#4P1800#5P1500#6P2000T2000!";
+    int param[7] = {0, 1400, 1500, 1600, -1, 1700, 2000};
+    char cmd_1[ACTION_LENGTH];
+    char cmd_2[ACTION_SINGLE_LENGTH];
 
     arm_args.abs_x   = INVALID_AXIS_VALUE;
     arm_args.abs_y   = INVALID_AXIS_VALUE;
     arm_args.timeout = DEFAULT_TIMEOUT;
     arm_args.action[0] = 0;
+
+
+    param_to_cmd(cmd_1, cmd_2, param);
+    printf("cmd_1=%s, cmd_2=%s\n", cmd_1, cmd_2);
 
     /* Parse the arguments */
 
@@ -222,22 +197,23 @@ int main(int argc, char *argv[])
     if (arm_args.action != NULL)
         uart_send(uart_id, arm_args.action, sizeof(arm_args.action)-1);
 
-    snprintf(action, sizeof(action), "#1P%d#2P%d#3P%d#4P%d#5P%d#6P%dT1500!");
 
-/*
+
     uart_send(uart_id,
               "#1P1700#2P1500#3P1700#4P1800#5P1500#6P2000T2000!",
               strlen("#1P1700#2P1500#3P1700#4P1800#5P1500#6P2000T2000!"));
 
-*/
+
 
 
     //sleep(5);
     close(uart_id);
+
+
     return 0;
 
 }
-
+#endif
 
 
 
