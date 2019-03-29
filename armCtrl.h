@@ -1,7 +1,9 @@
 #ifndef _ARMCTRL_H_
 #define _ARMCTRL_H_
 
-#define DEFAULT_TIMEOUT         1500
+#define DEFAULT_TIMEOUT         2000
+#define WAIT_TIMEOUT            3000
+
 #define ACTION_LENGTH           70
 #define ACTION_SINGLE_LENGTH    20
 

@@ -121,7 +121,7 @@ int uart_init(void)
     options.c_cflag |= CS8;
 
 
-    options.c_cflag |= (CLOCAL | CREAD);
+    options.c_cflag |= (CLOCAL);
     options.c_cflag &= ~CRTSCTS;
     options.c_iflag |= IGNPAR;
     options.c_oflag = 0;
