@@ -6,7 +6,9 @@
 #define ACTION_SINGLE_LENGTH    20
 
 
-extern const char reset_abs[];
+extern char reset_abs_5[];
+extern char reset_abs_6[];
+
 extern const char * servo_self_check_data[18];
 
 int param_to_cmd(char *cmd, char *cmd_catch,int * param);

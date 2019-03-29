@@ -11,14 +11,16 @@
 
 #include     "armCtrl.h"
 
-const char reset_abs[] = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P1500T1500!";
-const char * servo_self_check_data[18] = 
+char reset_abs_5[] = "#1P1500#2P1500#3P1500#4P1500#5P1500T1500!";
+char reset_abs_6[] = "#1P1500#2P1500#3P1500#4P1500#5P1500#6P1500T1500!";
+
+const char * servo_self_check_data[18] =
 {
     "#1P1000T700!",
     "#1P2000T700!",
     "#1P1500T700!",
 
-    "#2P17000T700!",
+    "#2P1700T700!",
     "#2P1300T700!",
     "#2P1500T700!",
 
@@ -55,7 +57,7 @@ int param_to_cmd(char *cmd, char *cmd_catch,int * param)
     memset(cmd,       0, ACTION_LENGTH);
     memset(cmd_catch, 0, ACTION_SINGLE_LENGTH);
 
-    /* for first 5 servos */    
+    /* for first 5 servos */
 
     for (i = 1; i < 6; i++)
     {
