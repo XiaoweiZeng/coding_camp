@@ -100,17 +100,17 @@ int main(int argc, char *argv[])
 
    uart_send("#Veri+201903291448\r\n", strlen("#Veri+201903291448\r\n"));
    usleep(WAIT_TIMEOUT * 1000);
-
+/*
    abs = getPosture(0, 0.2);
    if (abs == NULL)
        {
 	printf("abs is NULL\n");
-	return -1;       
+	return -1;
 	}
+*/
+   //catch_action(abs);
 
-   catch_action(abs);
 
- /*
    catch_action(param_catch_1);
    release_action(param_release);
 
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
 
    catch_action(param_catch_4);
    release_action(param_release);
-  
+ /*
 
    uart_send("#2P742T2000\r\n", strlen("#2P742T2000\r\n"));
     usleep(WAIT_TIMEOUT * 1000);
