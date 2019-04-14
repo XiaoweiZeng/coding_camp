@@ -15,8 +15,9 @@
 #define ACTION_LENGTH           70
 #define ACTION_SINGLE_LENGTH    20
 
-static int uart_id;
+#undef UART_DEBUG
 
+static int uart_id;
 
 typedef struct arm_args {
     int  abs_x;
@@ -24,7 +25,6 @@ typedef struct arm_args {
     int  timeout;
     char action[ACTION_LENGTH];
 } ARM_ARGS;
-
 
 static void usage(void)
 {
@@ -36,7 +36,6 @@ static void usage(void)
                     "-a | --action      action data"
                     "-h | --help        help message\n");
 }
-
 
 static void parse_args(int argc, char *argv[], ARM_ARGS * arm_args)
 {
@@ -96,9 +95,7 @@ static void parse_args(int argc, char *argv[], ARM_ARGS * arm_args)
             break;
         }
     }
-
 }
-
 
 int uart_init(void)
 {
@@ -168,8 +165,8 @@ void uart_close(void)
     close(uart_id);
 }
 
+#ifdef UART_DEBUG
 
-#if 0
 int main(int argc, char *argv[])
 {
     ARM_ARGS arm_args;
@@ -196,8 +193,6 @@ int main(int argc, char *argv[])
 
     if (arm_args.action != NULL)
         uart_send(uart_id, arm_args.action, sizeof(arm_args.action)-1);
-
-
 
     uart_send(uart_id,
               "#1P1700#2P1500#3P1700#4P1800#5P1500#6P2000T2000!",
