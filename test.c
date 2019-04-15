@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 
 #endif
 
-    catch_action(position[atoi(argv[1])] - 1);
+    catch_action(position[atoi(argv[1])-1]);
     release_action(position[4]);
 
 
